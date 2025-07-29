@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home - Facial Expression Recognition{% endblock %}
+
+{% block header %}Welcome to FacialScore{% endblock %}
+{% block subheader %}Revolutionizing Restaurant Feedback Through AI{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h3 class="card-title mb-3">About Our System</h3>
+                <p class="card-text">
+                    Our innovative system uses advanced deep learning technology to analyze customer facial expressions,
+                    providing restaurants with valuable feedback about their service and food quality. This automated
+                    approach helps unmanned restaurants understand customer satisfaction levels in real-time.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h3 class="card-title mb-3">How It Works</h3>
+                <p class="card-text">
+                    The system captures customer expressions through photos and processes them using a pre-trained
+                    convolutional neural network (CNN). It categorizes expressions into three main categories:
+                </p>
+                <ul class="list-unstyled">
+                    <li class="mb-2"><span class="badge bg-success">😊 Satisfied</span></li>
+                    <li class="mb-2"><span class="badge bg-warning text-dark">😐 Neutral</span></li>
+                    <li class="mb-2"><span class="badge bg-danger">😞 Disappointed</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-4 mb-4">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <i class="fas fa-camera fa-3x mb-3 text-primary"></i>
+                <h4 class="card-title">Capture</h4>
+                <p class="card-text">Take a photo while experiencing the service</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <i class="fas fa-brain fa-3x mb-3 text-primary"></i>
+                <h4 class="card-title">Analyze</h4>
+                <p class="card-text">AI processes your expression</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <i class="fas fa-chart-bar fa-3x mb-3 text-primary"></i>
+                <h4 class="card-title">Results</h4>
+                <p class="card-text">Get instant feedback analysis</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    <a href="{% url 'User' %}" class="btn btn-primary btn-lg">Start Rating Now</a>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+{% endblock %}

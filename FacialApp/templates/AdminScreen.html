@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Admin Dashboard - Facial Expression Recognition{% endblock %}
+
+{% block header %}Admin Dashboard{% endblock %}
+{% block subheader %}Manage and Monitor Restaurant Feedback{% endblock %}
+
+{% block extra_css %}
+<style>
+.dashboard-card {
+    transition: transform 0.2s;
+}
+.dashboard-card:hover {
+    transform: translateY(-5px);
+}
+.stat-card {
+    border-left: 4px solid var(--bs-primary);
+}
+.chart-container {
+    height: 300px;
+    margin-bottom: 2rem;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Welcome Message -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <h4 class="mb-0">
+                        <i class="fas fa-user-shield me-2"></i>Welcome, Administrator
+                    </h4>
+                    <p class="mt-2 mb-0">Monitor and analyze customer feedback through facial expression recognition</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="card stat-card h-100 dashboard-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-muted mb-2">Total Ratings</h6>
+                            <h3 class="mb-0">{{ total_ratings|default:"0" }}</h3>
+                        </div>
+                        <div class="bg-light rounded-circle p-3">
+                            <i class="fas fa-star fa-2x text-primary"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card stat-card h-100 dashboard-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-muted mb-2">Satisfaction Rate</h6>
+                            <h3 class="mb-0">{{ satisfaction_rate|default:"0" }}%</h3>
+                        </div>
+                        <div class="bg-light rounded-circle p-3">
+                            <i class="fas fa-smile fa-2x text-primary"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card stat-card h-100 dashboard-card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-muted mb-2">Today's Ratings</h6>
+                            <h3 class="mb-0">{{ today_ratings|default:"0" }}</h3>
+                        </div>
+                        <div class="bg-light rounded-circle p-3">
+                            <i class="fas fa-chart-line fa-2x text-primary"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="row">
+        <!-- Recent Ratings Table -->
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Recent Customer Ratings</h5>
+                    <a href="{% url 'ViewRating' %}" class="btn btn-primary btn-sm">
+                        <i class="fas fa-table me-2"></i>View All Ratings
+                    </a>
+                </div>
+                <div class="card-body">
+                    {% if data %}
+                    <div class="alert {% if 'Error' in data %}alert-danger{% else %}alert-info{% endif %} mb-4">
+                        {{ data }}
+                    </div>
+                    {% endif %}
+                    
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Customer Name</th>
+                                    <th>Rating</th>
+                                    <th>Expression</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for rating in recent_ratings|default:'' %}
+                                <tr>
+                                    <td>{{ rating.customer_name }}</td>
+                                    <td>
+                                        <div class="rating-stars">
+                                            {% for i in rating.rating|default:"0"|rjust:"5" %}
+                                            <i class="fas fa-star {% if forloop.counter <= rating.rating %}text-warning{% else %}text-muted{% endif %}"></i>
+                                            {% endfor %}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge {% if rating.expression == 'Satisfied' %}bg-success{% elif rating.expression == 'Neutral' %}bg-warning{% else %}bg-danger{% endif %}">
+                                            {{ rating.expression }}
+                                        </span>
+                                    </td>
+                                    <td>{{ rating.date }}</td>
+                                    <td>
+                                        <span class="badge bg-primary">Processed</span>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="5" class="text-center py-4">
+                                        <i class="fas fa-inbox fa-3x text-muted mb-3 d-block"></i>
+                                        <p class="text-muted mb-0">No ratings available yet</p>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Actions -->
+    <div class="row mt-4">
+        <div class="col-12 text-end">
+            <a href="{% url 'Index' %}" class="btn btn-outline-danger">
+                <i class="fas fa-sign-out-alt me-2"></i>Logout
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Add any additional JavaScript for charts or interactivity here
+</script>
+{% endblock %}

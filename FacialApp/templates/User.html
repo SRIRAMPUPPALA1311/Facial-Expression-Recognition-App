@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}User Rating - Facial Expression Recognition{% endblock %}
+
+{% block header %}Share Your Experience{% endblock %}
+{% block subheader %}Rate Your Restaurant Visit with a Smile{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title text-center mb-4">User Rating Form</h3>
+                
+                {% if data %}
+                <div class="alert {% if 'Error' in data %}alert-danger{% else %}alert-success{% endif %} mb-4">
+                    {{ data }}
+                </div>
+                {% endif %}
+
+                <form name="ratingForm" method="post" action="{% url 'Rating' %}" enctype="multipart/form-data" onsubmit="return validateForm(this);">
+                    {% csrf_token %}
+                    
+                    <div class="mb-4">
+                        <label for="customerName" class="form-label">Customer Name</label>
+                        <input type="text" class="form-control" id="customerName" name="t1" placeholder="Enter your name">
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="rating" class="form-label">Rating (1-5)</label>
+                        <input type="number" class="form-control" id="rating" name="t2" min="1" max="5" placeholder="Enter your rating">
+                        <div class="form-text">Please rate your experience from 1 (poor) to 5 (excellent)</div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="photo" class="form-label">Your Photo</label>
+                        <input type="file" class="form-control" id="photo" name="t3" accept="image/*">
+                        <div class="form-text">Please take a photo showing your expression about the experience</div>
+                    </div>
+
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary btn-lg px-5">Submit Rating</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function validateForm(formObj) {
+    if (!formObj.t1.value.trim()) {
+        showError('Please enter your name');
+        formObj.t1.focus();
+        return false;
+    }
+    
+    const rating = parseInt(formObj.t2.value);
+    if (!rating || rating < 1 || rating > 5) {
+        showError('Please enter a valid rating between 1 and 5');
+        formObj.t2.focus();
+        return false;
+    }
+    
+    if (!formObj.t3.value) {
+        showError('Please upload your photo');
+        formObj.t3.focus();
+        return false;
+    }
+    
+    return true;
+}
+
+function showError(message) {
+    // Create a Bootstrap alert
+    const alertDiv = document.createElement('div');
+    alertDiv.className = 'alert alert-danger alert-dismissible fade show mt-3';
+    alertDiv.role = 'alert';
+    alertDiv.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    `;
+    
+    // Insert the alert before the form
+    const form = document.querySelector('form');
+    form.parentNode.insertBefore(alertDiv, form);
+    
+    // Auto-dismiss after 3 seconds
+    setTimeout(() => {
+        const bsAlert = new bootstrap.Alert(alertDiv);
+        bsAlert.close();
+    }, 3000);
+}
+</script>
+{% endblock %}
