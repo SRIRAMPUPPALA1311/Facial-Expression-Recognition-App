@@ -110,4 +110,4 @@ This is a local application intended to run on your own machine. It is not confi
 
 ## Contact
 
-Ayub_07 - iamayub007@gmail.com
+Puppala Sriram - srirampuppala1311@gmail.com 
